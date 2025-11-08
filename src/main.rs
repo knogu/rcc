@@ -2,7 +2,7 @@ use std::env;
 mod parse;
 use crate::parse::parse;
 mod generate;
-
+mod node;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
