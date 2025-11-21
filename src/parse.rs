@@ -6,6 +6,7 @@ peg::parser!( pub grammar parse_c() for str {
 
     rule expr() -> Node
       = _ n:number() _ "+" _ r:expr() { Node::add(Node::Number {value: n}, r) }
+      / _ n:number() _ "-" _ r:expr() { Node::sub(Node::Number {value: n}, r) }
       / _ n:number() { Node::Number {value: n} }
 
     rule number() -> i64

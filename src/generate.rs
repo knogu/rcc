@@ -13,6 +13,14 @@ pub fn generate_node(node: &Node) {
             println!("  add rax, rdi");
             println!("  push rax");
         }
+        Node::Sub { lhs, rhs } => {
+            generate_node(lhs);
+            generate_node(rhs);
+            println!("  pop rdi");
+            println!("  pop rax");
+            println!("  sub rax, rdi");
+            println!("  push rax");
+        }
     }
 }
 
