@@ -5,13 +5,19 @@ peg::parser!( pub grammar parse_c() for str {
     pub rule parse() -> Node = expr();
 
     rule expr() -> Node
-      = _ n:number() _ "+" _ r:expr() { Node::add(Node::Number {value: n}, r) }
-      / _ n:number() _ "-" _ r:expr() { Node::sub(Node::Number {value: n}, r) }
-      / _ n:number() { Node::Number {value: n} }
+      = arithmetic()
 
-    rule number() -> i64
+    rule arithmetic() -> Node = precedence!{
+        x:(@) _ "+" _ y:@ { Node::add(x, y) }
+        x:(@) _ "-" _ y:@ { Node::sub(x, y) }
+        --
+        n:number() { n }
+        "(" e:arithmetic() ")" { e }
+    }
+
+    rule number() -> Node
         = n:$(['0'..='9']+)
-        { n.parse().unwrap() }
+        { Node::Number{value: n.parse().unwrap()} }
 
     rule _ = [' ' | '\t' | '\n']*
 });
